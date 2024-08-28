@@ -58,6 +58,21 @@ void inputLine()
 {
   printf("╚═ ");
 }
+/*
+  content("Colocar cualquier caracter para continuar");
+  inputLine();
+  char aux[3];
+  scanf("%s", aux);
+  fflush(stdin);
+*/
+void waiting()
+{
+  content("Colocar cualquier caracter para continuar");
+  inputLine();
+  char aux[3];
+  scanf("%s", aux);
+  fflush(stdin);
+}
 
 /*
 

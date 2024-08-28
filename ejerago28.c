@@ -72,11 +72,14 @@ void analizeStock(Product *products);
 
 void cuantosLesFaltanVender3(Product *products);
 
+void mockProducts(Product *products);
+
 int main()
 {
     Product *productos = malloc(sizeof(Product) * max);
     int option = 0;
 
+    mockProducts(productos);
     while (TRUE)
     {
         clear();
@@ -99,6 +102,7 @@ int main()
         midLine();
         content("8 - Salir.");
         midLine();
+        inputLine();
         scanf("%d", &option);
         switch (option)
         {
@@ -268,23 +272,15 @@ void printProducts(Product *products)
     topLine();
     for (int i = 0; i < position; i++)
     {
-        content("nombre: %s", products[i].name.str);
-        midLine();
+        content("NOMBRE: %s", products[i].name.str);
         content("codigo: %d", products[i].cod);
-        midLine();
         content("precio: %f", products[i].price);
-        midLine();
         content("stock: %d", products[i].stock);
-        midLine();
         content("stock minimo: %d", products[i].minStock);
         midLine();
     }
-    content("Coloca cualquier caracter para continuar");
     midLine();
-    inputLine();
-    char aux[3];
-    scanf("%s", aux);
-    fflush(stdin);
+    waiting();
 }
 
 void findProductByCode(Product *products)
@@ -314,10 +310,7 @@ void findProductByCode(Product *products)
             midLine();
             content("Coloca cualquier caracter para continuar");
             midLine();
-            inputLine();
-            char aux[3];
-            scanf("%s", aux);
-            fflush(stdin);
+            waiting();
             return;
         }
     }
@@ -327,10 +320,7 @@ void findProductByCode(Product *products)
     midLine();
     content("Coloca cualquier caracter para continuar");
     midLine();
-    inputLine();
-    char aux[3];
-    scanf("%s", aux);
-    fflush(stdin);
+    waiting();
 }
 
 void ralizePurchase(Product *products)
@@ -354,16 +344,21 @@ void ralizePurchase(Product *products)
                     topLine();
                     content("se decremento en 1 el stock de nombre: %s", products[i].name.str);
                     midLine();
-                    break;
+                    content("Pon cualquier caracter para continuar");
+                    midLine();
+                    waiting();
+                    return;
                 }
             }
             topLine();
-            content("Codigo no encontrado, ingresa otro.");
+            content("Codigo %d no encontrado, ingresa otro.", code);
             midLine();
+            continue;
         }
         topLine();
         content("Codigo invalido, ingresa otro.");
         midLine();
+        continue;
     }
 }
 
@@ -399,20 +394,19 @@ void modifyPriceProduct(Product *products)
                     content("Precio del producto %s modificado, ahora es $%f", products[i].name.str, products[i].price);
                     content("coloque cualquier caracter para continuar");
                     midLine();
-                    inputLine();
-                    char aux[3];
-                    scanf("%s", aux);
-                    fflush(stdin);
-                    break;
+                    waiting();
+                    return;
                 }
             }
             topLine();
             content("Codigo no encontrado, ingresa otro.");
             midLine();
+            continue;
         }
         topLine();
         content("Codigo invalido, ingresa otro.");
         midLine();
+        continue;
     }
 }
 
@@ -440,11 +434,7 @@ void analizeStock(Product *products)
         }
     }
     midLine();
-    content("Colocar cualquier caracter para continuar");
-    inputLine();
-    char aux[3];
-    scanf("%s", aux);
-    fflush(stdin);
+    waiting();
 }
 
 void cuantosLesFaltanVender3(Product *products)
@@ -462,9 +452,58 @@ void cuantosLesFaltanVender3(Product *products)
         }
     }
     midLine();
-    content("Colocar cualquier caracter para continuar");
-    inputLine();
-    char aux[3];
-    scanf("%s", aux);
-    fflush(stdin);
+    waiting();
+}
+
+void mockProducts(Product *products)
+{
+    products[0].name = newString50("CocaCola");
+    products[0].cod = 1;
+    products[0].price = 100;
+    products[0].stock = 10;
+    products[0].minStock = 5;
+
+    products[1].name = newString50("Pepsi");
+    products[1].cod = 2;
+    products[1].price = 120;
+    products[1].stock = 15;
+    products[1].minStock = 10;
+
+    products[2].name = newString50("Sprite");
+    products[2].cod = 3;
+    products[2].price = 110;
+    products[2].stock = 20;
+    products[2].minStock = 15;
+
+    products[3].name = newString50("Fanta");
+    products[3].cod = 4;
+    products[3].price = 130;
+    products[3].stock = 25;
+    products[3].minStock = 20;
+
+    products[4].name = newString50("Manaos");
+    products[4].cod = 5;
+    products[4].price = 80;
+    products[4].stock = 30;
+    products[4].minStock = 25;
+
+    products[5].name = newString50("Pepsi");
+    products[5].cod = 6;
+    products[5].price = 180;
+    products[5].stock = 3;
+    products[5].minStock = 3;
+
+    products[6].name = newString50("Monster");
+    products[6].cod = 7;
+    products[6].price = 180;
+    products[6].stock = 2;
+    products[6].minStock = 3;
+
+    products[7].name = newString50("RedBull");
+    products[7].cod = 8;
+    products[7].price = 180;
+    products[7].stock = 0;
+    products[7].minStock = 3;
+
+    position = 8;
 }
