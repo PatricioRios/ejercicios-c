@@ -3,6 +3,17 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
+typedef struct
+{
+  char *name;
+  int value;
+} Option;
+typedef struct
+{
+  Option *options;
+  int size;
+} Options;
+
 // CLEAR THE HISTORY CONSOLE
 void clear()
 {
@@ -74,13 +85,42 @@ void waiting()
   fflush(stdin);
 }
 
-/*
+void ordenarOptionsAscendente(Options *opts)
+{
+  int i, j;
+  for (i = 0; i < opts->size - 1; i++)
+  {
+    for (j = 0; j < opts->size - 1 - i; j++)
+    {
+      if (opts->options[j].value > opts->options[j + 1].value)
+      {
+        // Intercambiar las posiciones
+        Option temp = opts->options[j];
+        opts->options[j] = opts->options[j + 1];
+        opts->options[j + 1] = temp;
+      }
+    }
+  }
+}
 
-Confeccionar un programa que permina el ingreso de un apellido un nombre, el legajo de 10 empleados.
+void menuOptionsEnumerated(Options options)
+{
+  topLine();
+  for (int i = 0; i < options.size; i++)
+  {
+    content("%d - %s", i + 1, options.options[i].name);
+    midLine();
+  }
+}
 
-a) se debe asegurar que el apellido debera ser registrado en mayuscula
-B) el nombre, la primera letra con mayuscula y el resto con minuscula
-c) el legajo se construira a partir de las iniciales del apellido y e nombre mas de un numero de 3 cifras aleatorios
-d) generar tablas por genero
+void menuOptions(Options options)
+{
+  topLine();
+  ordenarOptionsAscendente(&options);
 
-*/
+  for (int i = 0; i < options.size; i++)
+  {
+    content("%d - %s", options.options[i].value, options.options[i].name);
+    midLine();
+  }
+}

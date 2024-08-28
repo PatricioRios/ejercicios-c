@@ -79,29 +79,22 @@ int main()
     Product *productos = malloc(sizeof(Product) * max);
     int option = 0;
 
+    Option arr[8] = {{"Dar de alta un producto nuevo.", 1},
+                     {"Buscar un producto por su Código.", 2},
+                     {"Modificar el stock por venta.", 3},
+                     {"Modificar el Precio de un producto.", 4},
+                     {"Cuantos productos tiene faltante.", 5},
+                     {"A cuantos le faltan vender 3 producto para que quede el stock mínimo.", 6},
+                     {"Mostrar productos.", 7},
+                     {"Salir.", 8}};
+
+    Options options = {arr, 8};
+
     mockProducts(productos);
     while (TRUE)
     {
         clear();
-        topLine();
-        content("hay %d personas en el sistema", option);
-        midLine();
-        content("1 - Dar de alta un producto nuevo");
-        midLine();
-        content("2 - Buscar un producto por su Código");
-        midLine();
-        content("3 - Modificar el stock por venta");
-        midLine();
-        content("4 - Modificar el Precio de un producto");
-        midLine();
-        content("5 - Cuantos productos tiene faltante");
-        midLine();
-        content("6 - A cuantos le faltan vender 3 producto para que quede el stock mínimo");
-        midLine();
-        content("7 - Mostrar productos.");
-        midLine();
-        content("8 - Salir.");
-        midLine();
+        menuOptions(options);
         inputLine();
         scanf("%d", &option);
         switch (option)
