@@ -11,6 +11,20 @@
     - Cuantos tienen menos del stock mínimo
     - A cuantos le faltan vender 3 producto para que quede el stock mínimo
 */
+
+/*
+echo "# ejercicios-c" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/PatricioRios/ejercicios-c.git
+git push -u origin main
+
+git remote add origin https://github.com/PatricioRios/ejercicios-c.git
+git branch -M main
+git push -u origin main
+*/
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -95,20 +109,20 @@ int main()
             findProductByCode(productos);
             continue;
         case 3:
-            realizePurchase(productos);
+            ralizePurchase(productos);
             continue;
         case 4:
             modifyPriceProduct(productos);
             continue;
         case 5:
             analizeStock(productos);
-            break;
+            continue;
         case 6:
-            /* code */
-            break;
+            cuantosLesFaltanVender3(productos);
+            continue;
         case 7:
             printProducts(productos);
-            break;
+            continue;
         case 8:
             free(productos);
             printf("Goodbye!");
