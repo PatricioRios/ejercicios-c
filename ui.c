@@ -188,3 +188,13 @@ void menuOptions(Options options)
     midLine();
   }
 }
+
+void window(const char *title, void (*func)())
+{
+  clear();
+  topLine();
+  content("%s", title);
+  midLine();
+  func();
+  bottomLine();
+}
