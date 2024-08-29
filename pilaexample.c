@@ -3,20 +3,23 @@
 #include <stdio.h>
 
 /* LISTA SIMPLE CON INSERCION EN EL PPIO y eliminación */
-struct lista {
+struct lista
+{
   char dato;           // dato a guardar en la lista
   struct lista *sigue; // campo de enlace al siguiente nodo
 } *inicio, *nuevo, *recorre, *aux;
 
 void verlista(struct lista *);
 void liblista(struct lista *);
-void main() {
+void main()
+{
 
   char c;
   inicio = NULL;
   // clrscr();
   printf("Ingrese caracteres hasta el punto \n");
-  while ((c = getche()) != '.') {
+  while ((c = getche()) != '.')
+  {
     if (islower(c)) // Inserci¢n al ppio
     {
       nuevo = malloc(sizeof(struct lista));
@@ -25,7 +28,8 @@ void main() {
       inicio = nuevo;
 
       verlista(inicio);
-    } else // eliminacin
+    }
+    else // eliminacin
     {
 
       if (inicio != NULL) // la lista no está vacía
@@ -34,7 +38,8 @@ void main() {
         inicio = inicio->sigue;
         free(aux);
         verlista(inicio);
-      } else // lista vac¡a
+      }
+      else // lista vac¡a
       {
         printf("\n---Lista VACIA");
         verlista(inicio);
@@ -45,7 +50,8 @@ void main() {
   getch();
 }
 
-void verlista(struct lista *inicio) {
+void verlista(struct lista *inicio)
+{
   struct lista *recorre;
   recorre = inicio; // pone recorre al ppio
   if (recorre)      // SI LA LISTA NO ESTA VACIA
@@ -60,9 +66,11 @@ void verlista(struct lista *inicio) {
   }
 }
 
-void liblista(struct lista *inicio) {
+void liblista(struct lista *inicio)
+{
   struct lista *aux;
-  while (inicio) {
+  while (inicio)
+  {
     aux = inicio;
     inicio = inicio->sigue;
     free(aux);

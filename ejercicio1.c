@@ -12,7 +12,6 @@ a) se debe asegurar que el apellido debera ser registrado en mayuscula
 B) el nombre, la primera letra con mayuscula y el resto con minuscula
 c) el legajo se construira a partir de las iniciales del apellido y nombre mas un numero de 3 cifras aleatorios
 d) generar tablas por genero
-
 */
 
 typedef struct
