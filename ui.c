@@ -79,6 +79,7 @@ void inputLine()
 void waiting()
 {
   content("Colocar cualquier caracter para continuar");
+  midLine();
   inputLine();
   char aux[3];
   scanf("%s", aux);

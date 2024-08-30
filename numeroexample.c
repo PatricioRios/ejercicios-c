@@ -43,7 +43,7 @@ int main()
         Numero *numero = malloc(sizeof(Numero));
         numero->num = malloc(sizeof(int)); // Reserva memoria para el entero
         *(numero->num) = i;
-        push(&stack, numero);
+        stack.push_on_top(&stack, numero);
     }
 
     Numero *top_num = (Numero *)stack.top->data;
@@ -52,16 +52,16 @@ int main()
     Numero *bottom_num = (Numero *)stack.Bottom->data;
     printf("Bottom element: %d\n", *(bottom_num->num));
 
-    delete_from_top(&stack);
+    stack.delete_from_top(&stack);
     printf("=========\n");
 
     Numero *numero = malloc(sizeof(Numero));
     numero->num = malloc(sizeof(int));
     *(numero->num) = 22;
-    push_on_bottom(&stack, numero);
+    stack.push_on_bottom(&stack, numero);
     printf("=========\n");
 
-    delete_from_bottom(&stack);
+    stack.delete_from_bottom(&stack);
     printf("=========\n");
     stack.foreach (&stack, print_num);
 
@@ -77,24 +77,24 @@ int main()
     *(numero1->num) = 44;
     printf("Numero = %d\n", *(numero1->num));
 
-    stack.modify_by_index(&stack, 7, modify);
+    stack.action_by_index(&stack, 7, modify);
     printf("Numero = %d\n", *(numero1->num));
 
     stack.foreach (&stack, print_num);
     printf("=========\n");
 
-    delete_by_index(&stack, 4);
+    stack.delete_by_index(&stack, 4);
     printf("=========after\n");
 
     stack.foreach (&stack, print_num);
 
     Numero *founded = malloc(sizeof(Numero));
     founded->num = malloc(sizeof(int));
-    *founded->num = 3;
+    *founded->num = 125;
 
     printf("Found : %d\n", *(founded->num));
 
-    int index = first(&stack, founded, searcher);
+    int index = stack.first(&stack, founded, searcher);
 
     if (index != -1)
     {
@@ -104,6 +104,6 @@ int main()
     {
         printf("Element not found\n");
     }
-    stack.modify_by_index(&stack, index, print_num);
+    stack.action_by_index(&stack, index, print_num);
     return 0;
 }
