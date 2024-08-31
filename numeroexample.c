@@ -5,9 +5,9 @@
 
 typedef struct
 {
-    int *num; // Puntero a entero
+    int num; // Puntero a entero
 } Numero;
-
+/*
 void print_num(void *data)
 {
     Numero *num = (Numero *)data;
@@ -33,10 +33,18 @@ int searcher(void *data, void *critery)
 
     return 0; // No encontrado
 }
+*/
+
+void mutate(void *num)
+{
+    Numero *numero = (Numero *)num;
+    numero->num = 225;
+}
 
 int main()
 {
     Stack stack = new_stack();
+    /*
 
     for (int i = 0; i < 12; i++)
     {
@@ -105,5 +113,16 @@ int main()
         printf("Element not found\n");
     }
     stack.action_by_index(&stack, index, print_num);
+    */
+
+    // other practice
+    Numero *numero = malloc(sizeof(Numero));
+    numero->num = 1;
+    printf("numero:%d\n", (numero->num));
+
+    stack.push_on_top(&stack, numero);
+    stack.action_by_index(&stack, 0, mutate);
+    printf("numero:%d\n", (numero->num));
+
     return 0;
 }

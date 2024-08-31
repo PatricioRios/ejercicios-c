@@ -114,6 +114,7 @@ struct Stack
      * @param self Puntero a la pila.
      */
     void (*liberate)(Stack *self);
+    void (*custom_free)(void *data);
     /**
      * @brief Aplica una función a cada elemento de la pila.
      *
@@ -272,9 +273,8 @@ void delete_by_index(Stack *self, int index)
         }
     }
 
-    free(current->data); ///< Libera la memoria del dato almacenado en el nodo.
-    free(current);       ///< Libera la memoria del nodo.
-
+    self->custom_free(current->data); ///< Libera la memoria del dato almacenado en el nodo.
+    free(current);                    ///< Libera la memoria del nodo.
     self->len--;
 }
 
@@ -327,8 +327,8 @@ void delete_from_top(Stack *self)
         self->top->former = NULL;
     }
 
-    free(top_data->data); ///< Libera la memoria del dato almacenado.
-    free(top_data);       ///< Libera la memoria del nodo.
+    self->custom_free(top_data->data); ///< Libera la memoria del dato almacenado.
+    free(top_data);                    ///< Libera la memoria del nodo.
 
     self->len--;
 }
@@ -353,8 +353,8 @@ void delete_from_bottom(Stack *self)
         self->Bottom->next = NULL;
     }
 
-    free(bottom_data->data); ///< Libera la memoria del dato almacenado.
-    free(bottom_data);       ///< Libera la memoria del nodo.
+    self->custom_free(bottom_data->data); ///< Libera la memoria del dato almacenado.
+    free(bottom_data);                    ///< Libera la memoria del nodo.
 
     self->len--;
 }
@@ -427,16 +427,29 @@ void liberate(Stack *self)
 {
     while (self->len > 0)
     {
-        delete_from_top(self);
+        Data *top_data = self->top;
+        self->top = top_data->next;
+        if (self->top != NULL)
+        {
+            self->top->former = NULL;
+        }
+
+        self->custom_free(top_data->data);
+        free(top_data);
+
+        self->len--;
     }
+    self->Bottom = NULL;
 }
 
 /**
- * @brief Crea e inicializa una nueva pila.
+ * @brief Crea e inicializa una nueva pila
+ *
+ * @param custom_free es una funcion que va a hacer la liberacion de memoria al llamar a liberate.
  *
  * @return Stack Una nueva pila inicializada.
  */
-Stack new_stack()
+Stack new_stack(void (*custom_free)(void *data))
 {
     Stack stack;
     stack.len = 0;
@@ -457,6 +470,7 @@ Stack new_stack()
     stack.first = first;
     stack.foreach = foreach;
     stack.foreach_indexed = foreach_indexed;
+    stack.custom_free = custom_free;
     stack.liberate = liberate;
 
     return stack;

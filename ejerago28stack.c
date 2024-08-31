@@ -11,7 +11,7 @@
 /*
 int cod;
 float price;
-char *name;
+String *name;
 int stock;
 int minStock
 */
@@ -49,16 +49,18 @@ void mockProducts(Stack *products);
 void printProduct_on_foreach_indexed(void *product, int index);
 int compare_by_code(void *a, void *b);
 void print_product_with_waiting(void *product);
-void decrementStock(Product *product);
+void decrementStock(void *data);
 
 void print_product(void *data);
 void for_analize_stock_zero(void *product);
 void for_analize_stock_min(void *product);
 void for_analize_stock_with_tree(void *data);
 
+void custom_free(void *data);
+
 int main()
 {
-    Stack productos = new_stack();
+    Stack productos = new_stack(custom_free);
     int option = 0;
 
     Option arr[8] = {
@@ -105,17 +107,31 @@ int main()
             printProducts(&productos);
             continue;
         case 8:
-            // free(&productos);
-            printf("Goodbye!");
+            productos.liberate(&productos);
+            printf("Goodbye!\n");
             return 0;
             break;
         default:
-            // free(&productos);
-            printf("Goodbye!");
+            productos.liberate(&productos);
+            printf("Goodbye!\n");
             return 0;
             break;
         }
     };
+}
+
+void custom_free(void *data)
+{
+    Product *product = (Product *)data;
+    print_product(product);
+    if (product != NULL)
+    {
+        if (product->name.str != NULL)
+        {
+            free(product->name.str);
+        }
+        free(product);
+    }
 }
 
 void loadProduct(Stack *stack)
@@ -362,8 +378,10 @@ void modifyPriceProduct(Stack *products)
 }
 
 // Esta funcion tambien funciona, pero da un warning.
-void decrementStock(Product *product)
+void decrementStock(void *data)
 {
+    Product *product = (Product *)data;
+
     printf("product:%s\n", product->name.str);
     product->stock--;
 }
@@ -490,82 +508,91 @@ void printProducts(Stack *products)
 
 void mockProducts(Stack *stack)
 {
-    Product *products = malloc(sizeof(Product) * 10);
-    products[0].name = StrNewFrom("CocaCola");
-    products[0].cod = 1;
-    products[0].price = 100;
-    products[0].stock = 10;
-    products[0].minStock = 5;
-
-    products[1].name = StrNewFrom("Pepsi");
-    products[1].cod = 2;
-    products[1].price = 120;
-    products[1].stock = 15;
-    products[1].minStock = 10;
-
-    products[2].name = StrNewFrom("Sprite");
-    products[2].cod = 3;
-    products[2].price = 110;
-    products[2].stock = 20;
-    products[2].minStock = 15;
-
-    products[3].name = StrNewFrom("Fanta");
-    products[3].cod = 4;
-    products[3].price = 130;
-    products[3].stock = 25;
-    products[3].minStock = 20;
-
-    products[4].name = StrNewFrom("Manaos");
-    products[4].cod = 5;
-    products[4].price = 80;
-    products[4].stock = 30;
-    products[4].minStock = 25;
-
-    products[5].name = StrNewFrom("Pepsi");
-    products[5].cod = 6;
-    products[5].price = 180;
-    products[5].stock = 3;
-    products[5].minStock = 3;
-
-    products[6].name = StrNewFrom("Monster");
-    products[6].cod = 7;
-    products[6].price = 180;
-    products[6].stock = 2;
-    products[6].minStock = 3;
-
-    products[7].name = StrNewFrom("RedBull");
-    products[7].cod = 8;
-    products[7].price = 180;
-    products[7].stock = 0;
-    products[7].minStock = 3;
-
-    products[8].name = StrNewFrom("Papel higienico");
-    products[8].cod = 9;
-    products[8].price = 1080;
-    products[8].stock = 10;
-    products[8].minStock = 2;
-
-    products[9].name = StrNewFrom("Servilletas");
-    products[9].cod = 10;
-    products[9].price = 200;
-    products[9].stock = 10;
-    products[9].minStock = 2;
-
     Product *product = malloc(sizeof(Product));
+    product->name = StrNewFrom("CocaCola");
+    product->cod = 1;
+    product->price = 100;
+    product->stock = 10;
+    product->minStock = 5;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
+    product->name = StrNewFrom("Pepsi");
+    product->cod = 2;
+    product->price = 120;
+    product->stock = 15;
+    product->minStock = 10;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
+    product->name = StrNewFrom("Sprite");
+    product->cod = 3;
+    product->price = 110;
+    product->stock = 20;
+    product->minStock = 15;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
+    product->name = StrNewFrom("Fanta");
+    product->cod = 4;
+    product->price = 130;
+    product->stock = 25;
+    product->minStock = 20;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
+    product->name = StrNewFrom("Manaos");
+    product->cod = 5;
+    product->price = 80;
+    product->stock = 30;
+    product->minStock = 25;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
+    product->name = StrNewFrom("Pepsi");
+    product->cod = 6;
+    product->price = 180;
+    product->stock = 3;
+    product->minStock = 3;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
+    product->name = StrNewFrom("Monster");
+    product->cod = 7;
+    product->price = 180;
+    product->stock = 2;
+    product->minStock = 3;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
+    product->name = StrNewFrom("RedBull");
+    product->cod = 8;
+    product->price = 180;
+    product->stock = 0;
+    product->minStock = 3;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
+    product->name = StrNewFrom("Papel higienico");
+    product->cod = 9;
+    product->price = 1080;
+    product->stock = 10;
+    product->minStock = 2;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
+    product->name = StrNewFrom("Servilletas");
+    product->cod = 10;
+    product->price = 200;
+    product->stock = 10;
+    product->minStock = 2;
+    stack->push_on_top(stack, product);
+    product = malloc(sizeof(Product));
+
     product->name = StrNewFrom("Servilletas");
     product->cod = 10;
     product->price = 200;
     product->stock = 6;
     product->minStock = 3;
     stack->push_on_top(stack, product);
-
-    printf("for insert\n");
-    for (int i = 0; i < 10; i++)
-    {
-        printf("for insert %d\n", i);
-        printf("for insert %d\n", i);
-
-        stack->push_on_top(stack, &(products[i]));
-    }
-    printf("for insert\n");
 }
