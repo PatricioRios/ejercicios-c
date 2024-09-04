@@ -1,128 +1,104 @@
+#include "stack.c"
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include "stack.c"
 
-typedef struct
+typedef struct Numero Numero;
+struct Numero
 {
-    int num; // Puntero a entero
-} Numero;
-/*
+  int num;
+};
+
 void print_num(void *data)
 {
-    Numero *num = (Numero *)data;
-    printf("Element: %d\n", *(num->num)); // Desreferencia el puntero para obtener el valor
+  Numero *num = (Numero *)data;
+  printf("Element: %d\n", num->num);
 }
 
-void modify(void *data)
+void custom_free(void *data)
 {
-    Numero *numero = (Numero *)data;
-    *(numero->num) = 125; // Modifica el valor apuntado por el puntero
+  Numero *numero = (Numero *)data;
+  free(numero);
 }
 
-int searcher(void *data, void *critery)
+int compare_nums_asc(const void *a, const void *b)
 {
-    Numero *num = (Numero *)data;
-    Numero *crit = (Numero *)critery;
+  Numero *num_a = *(Numero **)a;
+  Numero *num_b = *(Numero **)b;
+  return num_a->num - num_b->num;
+}
 
-    if (crit->num != NULL && *(crit->num) == *(num->num))
+// Función de búsqueda binaria
+int binary_search(Stack *stack, int target)
+{
+  int left = 0;
+  int right = stack->len - 1;
+
+  while (left <= right)
+  {
+    int mid = left + (right - left) / 2;
+    Numero *mid_num = (Numero *)stack->get_by_index(stack, mid)->data;
+
+    if (mid_num->num == target)
     {
-
-        return 1; // Elemento encontrado
+      return mid; // Elemento encontrado
     }
+    else if (mid_num->num < target)
+    {
+      left = mid + 1;
+    }
+    else
+    {
+      right = mid - 1;
+    }
+  }
 
-    return 0; // No encontrado
-}
-*/
-
-void mutate(void *num)
-{
-    Numero *numero = (Numero *)num;
-    numero->num = 225;
+  return -1; // Elemento no encontrado
 }
 
 int main()
 {
-    Stack stack = new_stack();
-    /*
+  Stack stack = new_stack(custom_free);
 
-    for (int i = 0; i < 12; i++)
-    {
-        Numero *numero = malloc(sizeof(Numero));
-        numero->num = malloc(sizeof(int)); // Reserva memoria para el entero
-        *(numero->num) = i;
-        stack.push_on_top(&stack, numero);
-    }
+  // Agregar números a la pila
+  int values[] = {5, 2, 8, 1, 9, 3, 7, 4, 6};
+  int num_values = sizeof(values) / sizeof(values[0]);
 
-    Numero *top_num = (Numero *)stack.top->data;
-    printf("Top element: %d\n", *(top_num->num));
-
-    Numero *bottom_num = (Numero *)stack.Bottom->data;
-    printf("Bottom element: %d\n", *(bottom_num->num));
-
-    stack.delete_from_top(&stack);
-    printf("=========\n");
-
+  for (int i = 0; i < num_values; i++)
+  {
     Numero *numero = malloc(sizeof(Numero));
-    numero->num = malloc(sizeof(int));
-    *(numero->num) = 22;
-    stack.push_on_bottom(&stack, numero);
-    printf("=========\n");
+    numero->num = values[i];
+    stack.push_on_top(&stack, numero);
+  }
 
-    stack.delete_from_bottom(&stack);
-    printf("=========\n");
-    stack.foreach (&stack, print_num);
+  printf("Pila original:\n");
+  stack.foreach (&stack, print_num);
 
-    printf("foreach\n");
-    stack.foreach (&stack, print_num);
+  // Ordenar la pila
+  stack.order_by(&stack, compare_nums_asc);
 
-    printf("len =%d\n", stack.len);
+  printf("\nPila ordenada:\n");
+  stack.foreach (&stack, print_num);
 
-    Numero *numero1 = (Numero *)stack.get_by_index(&stack, 7)->data;
+  // Realizar búsquedas binarias
+  int targets[] = {3, 6, 10};
+  int num_targets = sizeof(targets) / sizeof(targets[0]);
 
-    printf("Numero = %d\n", *(numero1->num));
-
-    *(numero1->num) = 44;
-    printf("Numero = %d\n", *(numero1->num));
-
-    stack.action_by_index(&stack, 7, modify);
-    printf("Numero = %d\n", *(numero1->num));
-
-    stack.foreach (&stack, print_num);
-    printf("=========\n");
-
-    stack.delete_by_index(&stack, 4);
-    printf("=========after\n");
-
-    stack.foreach (&stack, print_num);
-
-    Numero *founded = malloc(sizeof(Numero));
-    founded->num = malloc(sizeof(int));
-    *founded->num = 125;
-
-    printf("Found : %d\n", *(founded->num));
-
-    int index = stack.first(&stack, founded, searcher);
-
-    if (index != -1)
+  for (int i = 0; i < num_targets; i++)
+  {
+    int result = binary_search(&stack, targets[i]);
+    if (result != -1)
     {
-        printf("Founded : %d, index: %d\n", *(founded->num), index);
+      printf("\nEl número %d se encontró en la posición %d\n", targets[i], result);
     }
     else
     {
-        printf("Element not found\n");
+      printf("\nEl número %d no se encontró en la pila\n", targets[i]);
     }
-    stack.action_by_index(&stack, index, print_num);
-    */
+  }
 
-    // other practice
-    Numero *numero = malloc(sizeof(Numero));
-    numero->num = 1;
-    printf("numero:%d\n", (numero->num));
+  // Liberar la memoria de la pila
+  stack.liberate(&stack);
 
-    stack.push_on_top(&stack, numero);
-    stack.action_by_index(&stack, 0, mutate);
-    printf("numero:%d\n", (numero->num));
-
-    return 0;
+  return 0;
 }

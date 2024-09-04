@@ -64,7 +64,9 @@ void content(const char *format, ...)
   // Finalizar la lista de argumentos
   va_end(args);
 }
-
+/*
+  ╚═
+*/
 void inputLine()
 {
   printf("╚═ ");
@@ -75,6 +77,10 @@ void inputLine()
   char aux[3];
   scanf("%s", aux);
   fflush(stdin);
+
+  ║ 1 - Dar de alta un producto nuevo.
+  ╠════════════════════════════════════════
+  ╚═
 */
 void waiting()
 {

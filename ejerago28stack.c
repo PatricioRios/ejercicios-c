@@ -6,7 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "string.c"
-#include "stack.c"
+#include "stack.h"
+
+/*
+COMO EJECUTAR EL CODIGO.
+gcc ejerago28stack.c stack.c -o ejeragostack
+*/
 
 /*
 int cod;
@@ -590,7 +595,7 @@ void mockProducts(Stack *stack)
     product = malloc(sizeof(Product));
 
     product->name = StrNewFrom("Servilletas");
-    product->cod = 10;
+    product->cod = 11;
     product->price = 200;
     product->stock = 6;
     product->minStock = 3;
