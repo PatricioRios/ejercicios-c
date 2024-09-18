@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include <stdarg.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef struct
 {
@@ -17,24 +17,40 @@ typedef struct
 // CLEAR THE HISTORY CONSOLE
 void clear()
 {
+#ifdef _WIN32
+  system("cls");
+#elif __linux__
   system("clear");
+#endif
 }
 
 // ╔════════════════════════════════════════\n
 void topLine()
 {
+#ifdef _WIN32
+  printf("||=======================================\n");
+#elif __linux__
   printf("╔════════════════════════════════════════\n");
+#endif
 }
 
 // ╚════════════════════════════════════════\n
 void bottomLine()
 {
+#ifdef _WIN32
+  printf("||=======================================\n");
+#elif __linux__
   printf("╚════════════════════════════════════════\n");
+#endif
 }
 // ╠════════════════════════════════════════\n
 void midLine()
 {
+#ifdef _WIN32
+  printf("||=======================================\n");
+#elif __linux__
   printf("╠════════════════════════════════════════\n");
+#endif
 }
 // ║CONTENT WITH FORMAT
 void content(const char *format, ...)
@@ -52,8 +68,12 @@ void content(const char *format, ...)
   // Verificar si la operación se completó correctamente
   if (len >= 0 && len < sizeof(buffer))
   {
-    // Imprimir el mensaje formateado
+// Imprimir el mensaje formateado
+#ifdef _WIN32
+    printf("||\n");
+#elif __linux__
     printf("║ %s\n", buffer);
+#endif
   }
   else
   {
@@ -69,7 +89,12 @@ void content(const char *format, ...)
 */
 void inputLine()
 {
+#ifdef _WIN32
+  printf("||= ");
+
+#elif __linux__
   printf("╚═ ");
+#endif
 }
 /*
   content("Colocar cualquier caracter para continuar");
@@ -116,7 +141,8 @@ Example:
                      {"Modificar el stock por venta.", 1},
                      {"Modificar el Precio de un producto.", 1},
                      {"Cuantos productos tiene faltante.", 1},
-                     {"A cuantos le faltan vender 3 producto para que quede el stock mínimo.", 1},
+                     {"A cuantos le faltan vender 3 producto para que quede el
+stock mínimo.", 1},
                      {"Mostrar productos.", 1},
                      {"Salir.", 1}};
     Options options = {arr, 8};
@@ -140,7 +166,8 @@ Example:
     ║ 8 - Salir.
     ╠════════════════════════════════════════
 
-  Note: Order according to the order given in the arrangement, no enumeration needed
+  Note: Order according to the order given in the arrangement, no enumeration
+needed
 */
 void menuOptionsEnumerated(Options options)
 {
@@ -158,7 +185,8 @@ Example:
                      {"Modificar el stock por venta.", 3},
                      {"Modificar el Precio de un producto.", 4},
                      {"Cuantos productos tiene faltante.", 5},
-                     {"A cuantos le faltan vender 3 producto para que quede el stock mínimo.", 6},
+                     {"A cuantos le faltan vender 3 producto para que quede el
+stock mínimo.", 6},
                      {"Mostrar productos.", 7},
                      {"Salir.", 8}};
     Options options = {arr, 8};
