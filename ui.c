@@ -1,32 +1,27 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-typedef struct
-{
+typedef struct {
   char *name;
   int value;
 } Option;
-typedef struct
-{
+typedef struct {
   Option *options;
   int size;
 } Options;
 
 // CLEAR THE HISTORY CONSOLE
-void clear()
-{
+void clear() {
 #ifdef _WIN32
-  system("cls");
+  // system("cls");
 #elif __linux__
   system("clear");
 #endif
 }
 
 // ╔════════════════════════════════════════\n
-void topLine()
-{
+void topLine() {
 #ifdef _WIN32
   printf("||=======================================\n");
 #elif __linux__
@@ -35,8 +30,7 @@ void topLine()
 }
 
 // ╚════════════════════════════════════════\n
-void bottomLine()
-{
+void bottomLine() {
 #ifdef _WIN32
   printf("||=======================================\n");
 #elif __linux__
@@ -44,8 +38,7 @@ void bottomLine()
 #endif
 }
 // ╠════════════════════════════════════════\n
-void midLine()
-{
+void midLine() {
 #ifdef _WIN32
   printf("||=======================================\n");
 #elif __linux__
@@ -53,8 +46,7 @@ void midLine()
 #endif
 }
 // ║CONTENT WITH FORMAT
-void content(const char *format, ...)
-{
+void content(const char *format, ...) {
   va_list args;      // Lista de argumentos variables
   char buffer[1024]; // Tamaño adecuado para el mensaje
   int len;
@@ -66,17 +58,14 @@ void content(const char *format, ...)
   len = vsnprintf(buffer, sizeof(buffer), format, args);
 
   // Verificar si la operación se completó correctamente
-  if (len >= 0 && len < sizeof(buffer))
-  {
+  if (len >= 0 && len < sizeof(buffer)) {
 // Imprimir el mensaje formateado
 #ifdef _WIN32
     printf("||\n");
 #elif __linux__
     printf("║ %s\n", buffer);
 #endif
-  }
-  else
-  {
+  } else {
     // Manejar el error (por ejemplo, búfer demasiado pequeño)
     printf("Error al formatear el mensaje\n");
   }
@@ -87,8 +76,7 @@ void content(const char *format, ...)
 /*
   ╚═
 */
-void inputLine()
-{
+void inputLine() {
 #ifdef _WIN32
   printf("||= ");
 
@@ -107,8 +95,7 @@ void inputLine()
   ╠════════════════════════════════════════
   ╚═
 */
-void waiting()
-{
+void waiting() {
   content("Colocar cualquier caracter para continuar");
   midLine();
   inputLine();
@@ -117,15 +104,11 @@ void waiting()
   fflush(stdin);
 }
 
-void ordenarOptionsAscendente(Options *opts)
-{
+void ordenarOptionsAscendente(Options *opts) {
   int i, j;
-  for (i = 0; i < opts->size - 1; i++)
-  {
-    for (j = 0; j < opts->size - 1 - i; j++)
-    {
-      if (opts->options[j].value > opts->options[j + 1].value)
-      {
+  for (i = 0; i < opts->size - 1; i++) {
+    for (j = 0; j < opts->size - 1 - i; j++) {
+      if (opts->options[j].value > opts->options[j + 1].value) {
         // Intercambiar las posiciones
         Option temp = opts->options[j];
         opts->options[j] = opts->options[j + 1];
@@ -169,11 +152,9 @@ stock mínimo.", 1},
   Note: Order according to the order given in the arrangement, no enumeration
 needed
 */
-void menuOptionsEnumerated(Options options)
-{
+void menuOptionsEnumerated(Options options) {
   topLine();
-  for (int i = 0; i < options.size; i++)
-  {
+  for (int i = 0; i < options.size; i++) {
     content("%d - %s", i + 1, options.options[i].name);
     midLine();
   }
@@ -212,20 +193,17 @@ stock mínimo.", 6},
 
   Note: No need order
 */
-void menuOptions(Options options)
-{
+void menuOptions(Options options) {
   topLine();
   ordenarOptionsAscendente(&options);
 
-  for (int i = 0; i < options.size; i++)
-  {
+  for (int i = 0; i < options.size; i++) {
     content("%d - %s", options.options[i].value, options.options[i].name);
     midLine();
   }
 }
 
-void window(const char *title, void (*func)())
-{
+void window(const char *title, void (*func)()) {
   clear();
   topLine();
   content("%s", title);
