@@ -2,10 +2,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+/*
+compilar para windows
+i686-w64-mingw32-gcc -o molina-sep.exe molina-sep-25.c
+
+i686-w64-mingw32-gcc -o name.exe src.c
+
+ejecutar en entorno virtual windows
+wine molina-sep.exe 
+
+
+*/
+
 typedef struct {
   char *name;
   int value;
 } Option;
+
 typedef struct {
   Option *options;
   int size;
@@ -14,7 +27,7 @@ typedef struct {
 // CLEAR THE HISTORY CONSOLE
 void clear() {
 #ifdef _WIN32
-  // system("cls");
+  system("cls");
 #elif __linux__
   system("clear");
 #endif
@@ -61,7 +74,7 @@ void content(const char *format, ...) {
   if (len >= 0 && len < sizeof(buffer)) {
 // Imprimir el mensaje formateado
 #ifdef _WIN32
-    printf("||\n");
+    printf("||%s\n",buffer);
 #elif __linux__
     printf("║ %s\n", buffer);
 #endif

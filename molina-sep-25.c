@@ -6,19 +6,18 @@
 /*
 Generar un programa que cree una lista mínimo de 15 elementos a esa
 lista mañana con números Posteriormente se le debe agregar elemento
-Una vez que se la ha completado por el usuario, se la debe ordenar MAYOR a MENOR y VICEVERSA.-
+Una vez que se la ha completado por el usuario, se la debe ordenar MAYOR a MENOR
+y VICEVERSA.-
 */
 
 typedef struct Data Data;
 typedef struct Stack Stack;
 
-struct Data
-{
+struct Data {
   int Number;
   Data *next;
 };
-struct Stack
-{
+struct Stack {
   Data *top;
   int len;
 };
@@ -42,8 +41,7 @@ void order_by_desc(Stack *stack);
 void custom_free(Data *data);
 void liberate_stack(Stack *stack);
 
-int main()
-{
+int main() {
 
   Stack stack;
   stack.len = 0;
@@ -59,14 +57,12 @@ int main()
       {"Salir.", 1}};
 
   Options options = {arr, 5};
-  while (0 == 0)
-  {
+  while (0 == 0) {
     clear();
     menuOptionsEnumerated(options);
     inputLine();
     scanf("%d", &option);
-    switch (option)
-    {
+    switch (option) {
     case 1:
       get_number(&stack);
       continue;
@@ -91,8 +87,7 @@ int main()
     }
   }
 }
-void mock_numbers(Stack *stack)
-{
+void mock_numbers(Stack *stack) {
   push_number(stack, 4);
   push_number(stack, 1);
   push_number(stack, 4);
@@ -110,16 +105,14 @@ void mock_numbers(Stack *stack)
   push_number(stack, 11);
 }
 
-void print_numbers(Stack *stack)
-{
+void print_numbers(Stack *stack) {
   Data *current = stack->top;
   clear();
   topLine();
   content("numver / index");
   midLine();
   int index = 0;
-  while (current != NULL)
-  {
+  while (current != NULL) {
     content("%d / %d", current->Number, index);
     current = current->next;
     index++;
@@ -128,16 +121,14 @@ void print_numbers(Stack *stack)
   waiting();
 }
 
-void simple_print(Stack *stack)
-{
+void simple_print(Stack *stack) {
   Data *current = stack->top;
   clear();
   topLine();
-  content("numver / index");
+  content("number / index");
   midLine();
   int index = 0;
-  while (current != NULL)
-  {
+  while (current != NULL) {
     content("%d / %d", current->Number, index);
     current = current->next;
     index++;
@@ -145,24 +136,22 @@ void simple_print(Stack *stack)
   midLine();
 }
 
-void push_number(Stack *stack, int number)
-{
+void push_number(Stack *stack, int number) {
   Data *new_data = malloc(sizeof(Data));
   new_data->Number = number;
-  if (stack->top == NULL)
-  {
+  if (stack->top == NULL) {
+
+    new_data->next = NULL;
     stack->top = new_data;
-    printf("llego\n");
-  }
-  else
-  {
+  } else {
+
     new_data->next = stack->top;
     stack->top = new_data;
   }
+
   stack->len++;
 };
-void incert_number(Stack *stack)
-{
+void incert_number(Stack *stack) {
   int new_number = 0;
   clear();
   topLine();
@@ -173,27 +162,21 @@ void incert_number(Stack *stack)
   push_number(stack, new_number);
 }
 
-void get_number(Stack *stack)
-{
-  if (stack->len <= 15)
-  {
-    while (stack->len <= 15)
-    {
+void get_number(Stack *stack) {
+  if (stack->len <= 15) {
+    while (stack->len <= 15) {
       incert_number(stack);
       simple_print(stack);
       waiting();
     }
-  }
-  else
-  {
+  } else {
     incert_number(stack);
     simple_print(stack);
     waiting();
   }
 }
 
-void option_order_asc(Stack *stack)
-{
+void option_order_asc(Stack *stack) {
   order_by_asc(stack);
   clear();
   topLine();
@@ -202,10 +185,8 @@ void option_order_asc(Stack *stack)
   waiting();
 }
 
-void order_by_asc(Stack *stack)
-{
-  if (stack->top == NULL || stack->top->next == NULL)
-  {
+void order_by_asc(Stack *stack) {
+  if (stack->top == NULL || stack->top->next == NULL) {
     // La pila está vacía o tiene solo un elemento, ya está ordenada
     return;
   }
@@ -214,15 +195,12 @@ void order_by_asc(Stack *stack)
   Data *ptr1;
   Data *lptr = NULL;
 
-  do
-  {
+  do {
     swapped = 0;
     ptr1 = stack->top;
 
-    while (ptr1->next != lptr)
-    {
-      if (ptr1->Number > ptr1->next->Number)
-      {
+    while (ptr1->next != lptr) {
+      if (ptr1->Number > ptr1->next->Number) {
         // Intercambiar los números
         int temp = ptr1->Number;
         ptr1->Number = ptr1->next->Number;
@@ -235,8 +213,7 @@ void order_by_asc(Stack *stack)
   } while (swapped);
 }
 
-void option_order_desc(Stack *stack)
-{
+void option_order_desc(Stack *stack) {
   order_by_desc(stack);
   clear();
   topLine();
@@ -244,10 +221,8 @@ void option_order_desc(Stack *stack)
   midLine();
   waiting();
 }
-void order_by_desc(Stack *stack)
-{
-  if (stack->top == NULL || stack->top->next == NULL)
-  {
+void order_by_desc(Stack *stack) {
+  if (stack->top == NULL || stack->top->next == NULL) {
     // La pila está vacía o tiene solo un elemento, ya está ordenada
     return;
   }
@@ -256,15 +231,12 @@ void order_by_desc(Stack *stack)
   Data *ptr1;
   Data *lptr = NULL;
 
-  do
-  {
+  do {
     swapped = 0;
     ptr1 = stack->top;
 
-    while (ptr1->next != lptr)
-    {
-      if (ptr1->Number < ptr1->next->Number)
-      {
+    while (ptr1->next != lptr) {
+      if (ptr1->Number < ptr1->next->Number) {
         // Intercambiar los números
         int temp = ptr1->Number;
         ptr1->Number = ptr1->next->Number;
@@ -276,22 +248,19 @@ void order_by_desc(Stack *stack)
     lptr = ptr1;
   } while (swapped);
 }
-void custom_free(Data *data)
-{
-  if (data != NULL)
-  {
+void custom_free(Data *data) {
+  if (data != NULL) {
     custom_free(data->next);
-    printf("liberando %d", data->Number);
     free(data);
   }
 }
 
-void liberate_stack(Stack *stack)
-{
+void liberate_stack(Stack *stack) {
   custom_free(stack->top);
   clear();
   topLine();
   content("se libero el stack!");
   midLine();
   waiting();
+  stack->top = NULL;
 }
