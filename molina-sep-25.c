@@ -41,6 +41,18 @@ void order_by_desc(Stack *stack);
 void custom_free(Data *data);
 void liberate_stack(Stack *stack);
 
+void opt_add_numbers(void *context);
+
+void opt_view_list(void *context);
+
+void opt_order_asc(void *context);
+
+void opt_order_desc(void *context);
+
+void opt_liberate_list(void *context);
+
+void opt_exit(void *context);
+
 int main() {
 
   Stack stack;
@@ -49,43 +61,17 @@ int main() {
   mock_numbers(&stack);
 
   int option = 0;
-  Option arr[5] = {
-      {"Añadir 15 numeros. (individualmente despues de los 15).", 1},
-      {"Mostrar Lista.", 2},
-      {"Ordenar arreglo de manera ascendente.", 1},
-      {"Ordernar arreglo de manera descendente.", 8},
-      {"Salir.", 1}};
 
-  Options options = {arr, 5};
-  while (0 == 0) {
-    clear();
-    menuOptionsEnumerated(options);
-    inputLine();
-    scanf("%d", &option);
-    switch (option) {
-    case 1:
-      get_number(&stack);
-      continue;
-    case 2:
-      print_numbers(&stack);
-      continue;
-    case 3:
-      option_order_asc(&stack);
-      continue;
-    case 4:
-      option_order_desc(&stack);
-      continue;
-    case 5:
-      liberate_stack(&stack);
-      printf("GODBYE \n");
+  WindowOption opts[6] = {
+      {"Añadir 15 numeros. (individualmente despues de los 15).", 1, opt_add_numbers},
+      {"Mostrar Lista.", 2, opt_view_list},
+      {"Ordenar arreglo de manera ascendente.", 1, opt_order_asc},
+      {"Ordernar arreglo de manera descendente.", 8, opt_order_desc},
+      {"Liberar Lista", 2, opt_liberate_list},
+      {"Salir.", 1, opt_exit}};
+  WindowOptions window_options = {opts, 6};
 
-      return 3;
-    default:
-      liberate_stack(&stack);
-      printf("GODBYE \n");
-      continue;
-    }
-  }
+  window("Programa de pila de numeros", &stack, window_options);
 }
 void mock_numbers(Stack *stack) {
   push_number(stack, 4);
@@ -109,7 +95,7 @@ void print_numbers(Stack *stack) {
   Data *current = stack->top;
   clear();
   topLine();
-  content("numver / index");
+  content("numver / index (len = %d)",stack->len);
   midLine();
   int index = 0;
   while (current != NULL) {
@@ -263,4 +249,35 @@ void liberate_stack(Stack *stack) {
   midLine();
   waiting();
   stack->top = NULL;
+  stack->len =0;
+}
+
+void opt_add_numbers(void *context) {
+  Stack *stack = (Stack *)context;
+  get_number(stack);
+}
+
+void opt_view_list(void *context) {
+  Stack *stack = (Stack *)context;
+  print_numbers(stack);
+}
+
+void opt_order_asc(void *context) {
+  Stack *stack = (Stack *)context;
+  option_order_asc(stack);
+}
+void opt_order_desc(void *context) {
+  Stack *stack = (Stack *)context;
+  option_order_desc(stack);
+}
+
+void opt_liberate_list(void *context) {
+  Stack *stack = (Stack *)context;
+  liberate_stack(stack);
+}
+
+void opt_exit(void *context) {
+  Stack *stack = (Stack *)context;
+  liberate_stack(stack);
+  exit(0);
 }

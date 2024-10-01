@@ -1,7 +1,3 @@
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-
 /*
 compilar para windows
 i686-w64-mingw32-gcc -o molina-sep.exe molina-sep-25.c
@@ -9,10 +5,31 @@ i686-w64-mingw32-gcc -o molina-sep.exe molina-sep-25.c
 i686-w64-mingw32-gcc -o name.exe src.c
 
 ejecutar en entorno virtual windows
-wine molina-sep.exe 
-
-
+wine molina-sep.exe
 */
+#include <stdarg.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+/*
+char *nameOption;
+  int value;
+  void (* funcOption)(void * context)
+*/
+typedef struct {
+  char *nameOption;
+  int value;
+  void (*funcOption)(void *context);
+} WindowOption;
+/*
+  WindowOption *options;
+  int len;
+*/
+typedef struct {
+  WindowOption *options;
+  int len;
+} WindowOptions;
 
 typedef struct {
   char *name;
@@ -74,7 +91,7 @@ void content(const char *format, ...) {
   if (len >= 0 && len < sizeof(buffer)) {
 // Imprimir el mensaje formateado
 #ifdef _WIN32
-    printf("||%s\n",buffer);
+    printf("||%s\n", buffer);
 #elif __linux__
     printf("║ %s\n", buffer);
 #endif
@@ -216,11 +233,48 @@ void menuOptions(Options options) {
   }
 }
 
-void window(const char *title, void (*func)()) {
-  clear();
+void window_menu_option(WindowOptions options) {
   topLine();
-  content("%s", title);
-  midLine();
-  func();
-  bottomLine();
+  for (int i = 0; i < options.len; i++) {
+    content("%d - %s", i + 1, options.options[i].nameOption);
+    midLine();
+  }
+}
+
+void window(const char *title, void *context, WindowOptions opt) {
+  int option = 0;
+  int out = 1;
+  while (true) {
+    if (out == 1) {
+      clear();
+      topLine();
+      content(title);
+    } else {
+      clear();
+      topLine();
+      content("Opcion no valida, ingresa otra.");
+    }
+    midLine();
+    for (int i = 0; i < opt.len; i++) {
+      content("%d - %s", i, opt.options[i].nameOption);
+      midLine();
+    }
+    inputLine();
+    scanf("%d", &option);
+    fflush(stdin);
+
+    for (int i = 0; i < opt.len; i++) {
+      if (i == option) {
+        out = 1;  
+        opt.options[i].funcOption(context);
+        out = 1;
+        out = 1;
+        out = 1;
+        out = 1;
+        break;
+      } else {
+        out = 0;
+      }
+    }
+  }
 }
