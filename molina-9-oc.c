@@ -106,13 +106,13 @@ void opt_order_numbers(void *context){
       push_number_on_top(&stack_impar,current->Number);
   }
   order_by_asc(&stack_par);
-  order_by_asc(&stack_impar);
+  order_by_desc(&stack_impar);
   clear();
   topLine();
   content("NUMEROS PARES ORDENADOS DE MENOR A MAYOR");
   for(Data *current=stack_par.top;current!=NULL;current = current->next)
     content("%d",current->Number);
-  content("NUMEROS IMPARES ORDENADOS DE MENOR A MAYOR");
+  content("NUMEROS IMPARES ORDENADOS DE Mayor A Menor");
   for(Data *current=stack_impar.top;current!=NULL;current = current->next)
     content("%d",current->Number);
   midLine();
