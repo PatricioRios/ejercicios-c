@@ -11,7 +11,12 @@ wine molina-sep.exe
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <string.h>
+/*
+ * TODO: Hacer un winter, en donde elijas el tamaño de la ventana
+ * El el texto de la ventana, u cualquier cuadro va a tener que ser acomodado
+ * con \n para que siempre calce con la longitud especificada.
+ * */
 /*
 char *nameOption;
   int value;
@@ -49,6 +54,7 @@ void clear() {
   system("clear");
 #endif
 }
+
 
 // ╔════════════════════════════════════════\n
 void topLine() {

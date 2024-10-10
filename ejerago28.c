@@ -80,6 +80,8 @@ int main()
   Product *productos = malloc(sizeof(Product) * max);
   int option = 0;
 
+  int number_one = 0;
+
   Option arr[8] = {
       {"Dar de alta un producto nuevo.", 1},
       {"Buscar un producto por su Código.", 2},

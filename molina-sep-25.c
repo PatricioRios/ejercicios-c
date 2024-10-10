@@ -22,35 +22,35 @@ struct Stack {
   int len;
 };
 
+// mock numbers
 void mock_numbers(Stack *stack);
-
+// simple print
 void simple_print(Stack *stack);
 
-void push_number(Stack *stack, int number);
-void get_number(Stack *stack);
+// Add number logic
+void opt_add_numbers(void *context);
+
+// Add number infraestructure
+void push_number_on_top(Stack *stack, int number);
 void incert_number(Stack *stack);
 
-void print_numbers(Stack *stack);
+// View list logic
+void opt_view_list(void *context);
 
-void option_order_asc(Stack *stack);
+// Order asc logic
+void opt_order_asc(void *context);
 void order_by_asc(Stack *stack);
 
-void option_order_desc(Stack *stack);
+void opt_order_desc(void *context);
 void order_by_desc(Stack *stack);
+
+// liberate stack option logic
+void opt_liberate_list(void *context);
 
 void custom_free(Data *data);
 void liberate_stack(Stack *stack);
 
-void opt_add_numbers(void *context);
-
-void opt_view_list(void *context);
-
-void opt_order_asc(void *context);
-
-void opt_order_desc(void *context);
-
-void opt_liberate_list(void *context);
-
+// exit logic
 void opt_exit(void *context);
 
 int main() {
@@ -60,10 +60,9 @@ int main() {
   stack.top = NULL;
   mock_numbers(&stack);
 
-  int option = 0;
-
   WindowOption opts[6] = {
-      {"Añadir 15 numeros. (individualmente despues de los 15).", 1, opt_add_numbers},
+      {"Añadir 15 numeros. (individualmente despues de los 15).", 1,
+       opt_add_numbers},
       {"Mostrar Lista.", 2, opt_view_list},
       {"Ordenar arreglo de manera ascendente.", 1, opt_order_asc},
       {"Ordernar arreglo de manera descendente.", 8, opt_order_desc},
@@ -73,36 +72,42 @@ int main() {
 
   window("Programa de pila de numeros", &stack, window_options);
 }
+
 void mock_numbers(Stack *stack) {
-  push_number(stack, 4);
-  push_number(stack, 1);
-  push_number(stack, 4);
-  push_number(stack, 322);
-  push_number(stack, 5);
-  push_number(stack, 2);
-  push_number(stack, 7);
-  push_number(stack, 20);
-  push_number(stack, 9);
-  push_number(stack, 10);
-  push_number(stack, 11);
-  push_number(stack, 12);
-  push_number(stack, 2);
-  push_number(stack, 14);
-  push_number(stack, 11);
+  push_number_on_top(stack, 4);
+  push_number_on_top(stack, 1);
+  push_number_on_top(stack, 4);
+  push_number_on_top(stack, 322);
+  push_number_on_top(stack, 5);
+  push_number_on_top(stack, 2);
+  push_number_on_top(stack, 7);
+  push_number_on_top(stack, 20);
+  push_number_on_top(stack, 9);
+  push_number_on_top(stack, 10);
+  push_number_on_top(stack, 11);
+  push_number_on_top(stack, 12);
+  push_number_on_top(stack, 2);
+  push_number_on_top(stack, 14);
+  push_number_on_top(stack, 11);
 }
 
-void print_numbers(Stack *stack) {
+void opt_view_list(void *context) {
+
+  Stack *stack = (Stack *)context;
   Data *current = stack->top;
+  int index = 0;
+
   clear();
   topLine();
-  content("numver / index (len = %d)",stack->len);
+  content("numver ║ index (len = %d)", stack->len);
   midLine();
-  int index = 0;
+
   while (current != NULL) {
-    content("%d / %d", current->Number, index);
+    content("%d ║ %d", current->Number, index);
     current = current->next;
     index++;
   }
+
   midLine();
   waiting();
 }
@@ -111,18 +116,18 @@ void simple_print(Stack *stack) {
   Data *current = stack->top;
   clear();
   topLine();
-  content("number / index");
+  content("number ║ index");
   midLine();
   int index = 0;
   while (current != NULL) {
-    content("%d / %d", current->Number, index);
+    content("%d ║ %d", current->Number, index);
     current = current->next;
     index++;
   }
   midLine();
 }
 
-void push_number(Stack *stack, int number) {
+void push_number_on_top(Stack *stack, int number) {
   Data *new_data = malloc(sizeof(Data));
   new_data->Number = number;
   if (stack->top == NULL) {
@@ -137,6 +142,7 @@ void push_number(Stack *stack, int number) {
 
   stack->len++;
 };
+
 void incert_number(Stack *stack) {
   int new_number = 0;
   clear();
@@ -145,10 +151,11 @@ void incert_number(Stack *stack) {
   midLine();
   inputLine();
   scanf("%d", &new_number);
-  push_number(stack, new_number);
+  push_number_on_top(stack, new_number);
 }
 
-void get_number(Stack *stack) {
+void opt_add_numbers(void *context) {
+  Stack *stack = (Stack *)context;
   if (stack->len <= 15) {
     while (stack->len <= 15) {
       incert_number(stack);
@@ -162,7 +169,9 @@ void get_number(Stack *stack) {
   }
 }
 
-void option_order_asc(Stack *stack) {
+void opt_order_asc(void *context) {
+  Stack *stack = (Stack *)context;
+
   order_by_asc(stack);
   clear();
   topLine();
@@ -199,7 +208,8 @@ void order_by_asc(Stack *stack) {
   } while (swapped);
 }
 
-void option_order_desc(Stack *stack) {
+void opt_order_desc(void *context) {
+  Stack *stack = (Stack *)context;
   order_by_desc(stack);
   clear();
   topLine();
@@ -249,26 +259,7 @@ void liberate_stack(Stack *stack) {
   midLine();
   waiting();
   stack->top = NULL;
-  stack->len =0;
-}
-
-void opt_add_numbers(void *context) {
-  Stack *stack = (Stack *)context;
-  get_number(stack);
-}
-
-void opt_view_list(void *context) {
-  Stack *stack = (Stack *)context;
-  print_numbers(stack);
-}
-
-void opt_order_asc(void *context) {
-  Stack *stack = (Stack *)context;
-  option_order_asc(stack);
-}
-void opt_order_desc(void *context) {
-  Stack *stack = (Stack *)context;
-  option_order_desc(stack);
+  stack->len = 0;
 }
 
 void opt_liberate_list(void *context) {
