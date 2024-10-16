@@ -55,7 +55,6 @@ void clear() {
 #endif
 }
 
-
 // ╔════════════════════════════════════════\n
 void topLine() {
 #ifdef _WIN32
@@ -271,11 +270,7 @@ void window(const char *title, void *context, WindowOptions opt) {
 
     for (int i = 0; i < opt.len; i++) {
       if (i == option) {
-        out = 1;  
         opt.options[i].funcOption(context);
-        out = 1;
-        out = 1;
-        out = 1;
         out = 1;
         break;
       } else {
