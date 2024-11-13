@@ -36,10 +36,10 @@ void incert_number(Stack *stack);
 void opt_view_list(void *context);
 
 // Order asc logic
-void opt_order_asc(void *context);
+void ver_mas_caro_y_barato(void *context);
 void order_by_asc(Stack *stack);
 
-void opt_order_desc(void *context);
+void menores_a_70(void *context);
 void order_by_desc(Stack *stack);
 
 // liberate stack option logic
@@ -352,7 +352,7 @@ void opt_add_numbers(void *context) {
   }
 }
 
-void opt_order_asc(void *context) {
+void ver_mas_caro_y_barato(void *context) {
   Stack *stack = (Stack *)context;
 
   order_by_asc(stack);
@@ -391,7 +391,7 @@ void order_by_asc(Stack *stack) {
   } while (swapped);
 }
 
-void opt_order_desc(void *context) {
+void menores_a_70(void *context) {
   Stack *stack = (Stack *)context;
   order_by_desc(stack);
   clear();

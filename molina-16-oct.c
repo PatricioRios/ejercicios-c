@@ -4,12 +4,11 @@
 #include <stdlib.h>
 
 /*
-Realizar un programa que genera una lista en la cual se almacene los promedios
-de una escuela. Se debe indicar cuál es el mayor promedio. A partir de esa lista
-se debe generar una 2da que de be contener solo a los alumnos que tienen
-promedio mayor a 699. Se deb ordenarla de Menor a Mayor. También se debe generar
-otra lista que contenga al resto de los elementos y se la debe ordenar siguiendo
-el mismo criterio que la anterior.
+Realizar un programa que genera una lista en la cual se almacene los promedios de una escuela. 
+Se debe indicar cuál es el mayor promedio. 
+A partir de esa lista se debe generar una 2da que de be contener solo a los alumnos que tienen promedio mayor a 699. 
+Se debe ordenarla de Menor a Mayor. 
+También se debe generar otra lista que contenga al resto de los elementos y se la debe ordenar siguiendo el mismo criterio que la anterior.
 */
 
 #define CRITERY (float)699.0
@@ -18,15 +17,18 @@ typedef struct Data Data;
 typedef struct Stack Stack;
 
 struct Data {
-  float Number;
-  Data *next;
-  Data *former;
+    int value;  // Valor del nodo
+    Data *next;
+    Data *former;
 };
+
 struct Stack {
-  Data *top;
-  Data *Bottom;
-  int len;
+    Data *top;
+    Data *bottom;
+    int len;
 };
+
+void opt_;
 
 // mock numbers
 void mock_numbers(Stack *stack);
@@ -43,10 +45,10 @@ void incert_number(Stack *stack);
 void opt_view_list(void *context);
 
 // Order asc logic
-void opt_order_asc(void *context);
+void ver_mas_caro_y_barato(void *context);
 void order_by_asc(Stack *stack);
 
-void opt_order_desc(void *context);
+void menores_a_70(void *context);
 void order_by_desc(Stack *stack);
 
 // liberate stack option logic
@@ -415,7 +417,7 @@ void opt_add_numbers(void *context) {
   }
 }
 
-void opt_order_asc(void *context) {
+void ver_mas_caro_y_barato(void *context) {
   Stack *stack = (Stack *)context;
 
   order_by_asc(stack);
@@ -454,7 +456,7 @@ void order_by_asc(Stack *stack) {
   } while (swapped);
 }
 
-void opt_order_desc(void *context) {
+void menores_a_70(void *context) {
   Stack *stack = (Stack *)context;
   order_by_desc(stack);
   clear();

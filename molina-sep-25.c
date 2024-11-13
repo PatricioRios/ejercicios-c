@@ -38,10 +38,10 @@ void incert_number(Stack *stack);
 void opt_view_list(void *context);
 
 // Order asc logic
-void opt_order_asc(void *context);
+void ver_mas_caro_y_barato(void *context);
 void order_by_asc(Stack *stack);
 
-void opt_order_desc(void *context);
+void menores_a_70(void *context);
 void order_by_desc(Stack *stack);
 
 // liberate stack option logic
@@ -64,8 +64,8 @@ int main() {
       {"Añadir 15 numeros. (individualmente despues de los 15).", 1,
        opt_add_numbers},
       {"Mostrar Lista.", 2, opt_view_list},
-      {"Ordenar arreglo de manera ascendente.", 1, opt_order_asc},
-      {"Ordernar arreglo de manera descendente.", 8, opt_order_desc},
+      {"Ordenar arreglo de manera ascendente.", 1, ver_mas_caro_y_barato},
+      {"Ordernar arreglo de manera descendente.", 8, menores_a_70},
       {"Liberar Lista", 2, opt_liberate_list},
       {"Salir.", 1, opt_exit}};
   WindowOptions window_options = {opts, 6};
@@ -169,7 +169,7 @@ void opt_add_numbers(void *context) {
   }
 }
 
-void opt_order_asc(void *context) {
+void ver_mas_caro_y_barato(void *context) {
   Stack *stack = (Stack *)context;
 
   order_by_asc(stack);
@@ -208,7 +208,7 @@ void order_by_asc(Stack *stack) {
   } while (swapped);
 }
 
-void opt_order_desc(void *context) {
+void menores_a_70(void *context) {
   Stack *stack = (Stack *)context;
   order_by_desc(stack);
   clear();

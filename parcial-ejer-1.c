@@ -1,28 +1,19 @@
 /*
-compilar para windows
-i686-w64-mingw32-gcc -o molina-sep.exe molina-sep-25.c
-
-i686-w64-mingw32-gcc -o name.exe src.c
-
-ejecutar en entorno virtual windows
-wine molina-sep.exe
+Ejercicio N° 1
+Generar una matriz de m por n elementos en los cuales m no puede ser inferior a 100 y n a 50.
+Se pide:
+Crear una funcion para obtener el promedio por fila y cargarlo en un vector.
+Crear una función para obtener el mayor y el menor de cada fila y también cargarlo a cada uno en un vector distinto.
+Por final del ejercicio indicar cuál fue el mayor elemento Como así también el menor elemento encontrado y también el promedio general
 */
-#include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <stdarg.h>
 
-/*
- * TODO: Hacer un winter, en donde elijas el tamaño de la ventana
- * El el texto de la ventana, u cualquier cuadro va a tener que ser acomodado
- * con \n para que siempre calce con la longitud especificada.
- * */
-/*
-char *nameOption;
-  int value;
-  void (* funcOption)(void * context)
-*/
+
+//funciones propias
 
 typedef struct {
   char *nameOption;
@@ -280,4 +271,113 @@ void window(const char *title, void *context, WindowOptions opt) {
       }
     }
   }
+}
+//fin de funciones propias
+
+#define M 110
+#define N 60
+
+void generarMatriz(int matriz[M][N], int filas, int columnas) {
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            matriz[i][j] = (rand() % (101-0+1) + 0); 
+        }
+    }
+}
+
+void obtenerPromedioPorFila(int matriz[M][N], int filas, int columnas, float promedio[]) {
+    for (int i = 0; i < filas; i++) {
+        int suma = 0;
+        for (int j = 0; j < columnas; j++) {
+            suma += matriz[i][j];
+        }
+        promedio[i] = suma / (float)columnas;
+    }
+}
+
+void obtenerMayorYMenorPorFila(int matriz[M][N], int filas, int columnas, int mayor[], int menor[]) {
+    for (int i = 0; i < filas; i++) {
+        mayor[i] = matriz[i][0];
+        menor[i] = matriz[i][0];
+        for (int j = 1; j < columnas; j++) {
+            if (matriz[i][j] > mayor[i]) {
+                mayor[i] = matriz[i][j];
+            }
+            if (matriz[i][j] < menor[i]) {
+                menor[i] = matriz[i][j];
+            }
+        }
+    }
+}
+
+void obtenerMayorYMenorDeMatriz(int matriz[M][N], int filas, int columnas, int *mayor, int *menor) {
+    *mayor = matriz[0][0];
+    *menor = matriz[0][0];
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            if (matriz[i][j] > *mayor) {
+                *mayor = matriz[i][j];
+            }
+            if (matriz[i][j] < *menor) {
+                *menor = matriz[i][j];
+            }
+        }
+    }
+}
+
+float obtenerPromedioGeneral(int matriz[M][N], int filas, int columnas) {
+    int suma = 0;
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+            suma += matriz[i][j];
+        }
+    }
+    return suma / (float)(filas * columnas);
+}
+
+int main() {
+    int matriz[M][N];
+    float promedio[M];
+    int mayor[M], menor[M];
+    int maximoGlobal, minimoGlobal;
+
+    generarMatriz(matriz, M, N);
+
+    obtenerPromedioPorFila(matriz, M, N, promedio);
+
+    obtenerMayorYMenorPorFila(matriz, M, N, mayor, menor);
+
+    obtenerMayorYMenorDeMatriz(matriz, M, N, &maximoGlobal, &minimoGlobal);
+
+    float promedioGeneral = obtenerPromedioGeneral(matriz, M, N);
+
+    clear(); 
+    for(int i =0 ;i<M;i++){
+        printf("fila %d : ",i);
+        for(int j=0;j<N;j++){
+            printf("%d|",matriz[i][j]);
+        }
+        printf("\n");
+    }
+    topLine();
+    content("Resultados del Ejercicio N° 1");
+    midLine();
+    content("Promedio por fila:");
+    for (int i = 0; i < M; i++) {
+        content("Fila %d: %.2f", i, promedio[i]);
+    }
+    midLine();
+    content("Mayor y menor por fila:");
+    for (int i = 0; i < M; i++) {
+        content("Fila %d - Mayor: %d, Menor: %d", i, mayor[i], menor[i]);
+    }
+    midLine();
+    content("Resumen final:");
+    content("Mayor elemento en la matriz: %d", maximoGlobal);
+    content("Menor elemento en la matriz: %d", minimoGlobal);
+    content("Promedio general de la matriz: %.2f", promedioGeneral);
+    midLine();
+    waiting(); 
+
+    return 0;
 }

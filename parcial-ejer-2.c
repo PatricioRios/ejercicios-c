@@ -1,28 +1,18 @@
 /*
-compilar para windows
-i686-w64-mingw32-gcc -o molina-sep.exe molina-sep-25.c
-
-i686-w64-mingw32-gcc -o name.exe src.c
-
-ejecutar en entorno virtual windows
-wine molina-sep.exe
+Ejercicio N° 2
+Desarrollar un programa que en una lista me permita mediante funciones poder realizar lo siguiente
+1° por medio de una función registrar en una lista el precio de 100 productos, validando que todos sean mayor a cero.
+2° crear una función que me indique Cuál es el precio más caro y cuál es el precio más barato.
+3° por medio de una función que imprima el precio de los productos menor a $70
 */
-#include <stdarg.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <stdarg.h>
 
-/*
- * TODO: Hacer un winter, en donde elijas el tamaño de la ventana
- * El el texto de la ventana, u cualquier cuadro va a tener que ser acomodado
- * con \n para que siempre calce con la longitud especificada.
- * */
-/*
-char *nameOption;
-  int value;
-  void (* funcOption)(void * context)
-*/
+
+//funciones propias
 
 typedef struct {
   char *nameOption;
@@ -281,3 +271,244 @@ void window(const char *title, void *context, WindowOptions opt) {
     }
   }
 }
+//fin de funciones propias
+
+
+typedef struct Data Data;
+typedef struct Stack Stack;
+
+struct Data
+{
+  float Precio;
+  Data *next;
+  Data *former;
+};
+struct Stack
+{
+  Data *top;
+  Data *Bottom;
+  int len;
+};
+
+// utilities
+void mock_numbers(Stack *stack);
+void simple_print(Stack *stack);
+void push_number_on_top(Stack *stack, float number);
+void free_data(Data *data);
+void free_stack(Stack *stack);
+
+void pop_on_top(Stack *stack);
+
+void delete_data(Data *data);
+void delete_data_on_stack(Stack *stack, Data *data);
+
+
+void opt_add_number(void *context);     // opt 0
+void opt_view_list(void *context);      // opt 1
+void ver_mas_caro_y_barato(void *context);      // opt 2
+void menores_a_70(void *context);     // opt 3
+void opt_liberate_stack(void *context); // opt 8
+void opt_mock_numbers(void *context);   // opt 9
+void opt_exit(void *context);           // opt 10
+
+
+int main()
+{
+
+  Stack stack;
+  stack.len = 0;
+  stack.top = NULL;
+  stack.Bottom = NULL;
+  mock_numbers(&stack);
+
+  WindowOption opts[7] = {
+      {"Añadir numero.", 1, opt_add_number},
+      {"Mostrar Lista.", 2, opt_view_list},
+      {"Ver el mas caro y el mas barato.", 1, ver_mas_caro_y_barato},
+      {"Ver los menores a 70.", 8, menores_a_70},
+      {"Liberar Lista", 2, opt_liberate_stack},
+      {"Mockear numeros.", 2, opt_mock_numbers},
+      {"Salir.", 1, opt_exit}};
+  WindowOptions window_options = {opts, 7};
+
+  window("Programa de pila de numeros", &stack, window_options);
+}
+
+
+void mock_numbers(Stack *stack) {
+    for (int i = 0; i <= 100; i++) {
+        float num = (float)(rand() % (1001-0+1) + 0);
+        
+        push_number_on_top(stack, num);
+    }
+
+}
+
+void simple_print(Stack *stack)
+{
+  Data *current = stack->top;
+  clear();
+  topLine();
+  content("number ║ index");
+  midLine();
+  int index = 0;
+  for (Data *current = stack->top; current != NULL; current = current->next)
+  {
+    content("%d ║ %d", current->Precio, index);
+    current = current->next;
+    index++;
+  }
+  midLine();
+  waiting();
+}
+
+void push_number_on_top(Stack *stack, float number)
+{
+  Data *new_data = malloc(sizeof(Data));
+  new_data->Precio = number;
+  if (stack->top == NULL)
+  {
+    new_data->next = NULL;
+    stack->top = new_data;
+  }
+  else
+  {
+    new_data->next = stack->top;
+    stack->top = new_data;
+  }
+  stack->len++;
+}
+
+float sum_numbers(Stack *stack)
+{
+  float sum = 0;
+  for (Data *current = stack->top; current != NULL; current = current->next)
+    sum = sum + (float)current->Precio;
+  return sum;
+}
+float prom_numbers(Stack *stack)
+{
+  return sum_numbers(stack) / stack->len;
+}
+
+void free_data(Data *data)
+{
+  free(data);
+}
+
+void delete_data(Data *data)
+{
+  data->former->next = data->next;
+  data->next->former = data->former;
+  free_data(data);
+}
+
+
+void recursive_delete_data(Data *data)
+{
+  if (data == NULL)
+    return;
+  recursive_delete_data(data->next);
+  free(data);
+}
+void free_stack(Stack *stack)
+{
+  recursive_delete_data(stack->top);
+  stack->top = NULL;
+  stack->Bottom = NULL;
+  stack->len = 0;
+}
+
+
+void opt_add_number(void *context){
+  Stack *stack = (Stack *)context;
+  float number;
+  
+  do{
+    clear();
+    topLine();
+    content("Ingrese el numero a añadir:");
+    midLine();
+    inputLine();
+    scanf("%f", &number);
+    fflush(stdin);
+  }while(number <= 0);
+  push_number_on_top(stack, number);
+  clear();
+  topLine();
+  content("El numero añadido es %f",stack->top->Precio);
+  midLine();
+  waiting();
+}
+void opt_view_list(void *context) {
+  Stack *stack = (Stack *)context;
+  clear();
+  topLine();
+  content("number ║ index (longitud actual: %d)",stack->len);
+  midLine();
+  int index = 0;
+  for(Data * current= stack->top;current!=NULL;current = current->next){
+    content("%f ║ %d",current->Precio,index);
+    index++;
+  }
+  midLine();
+  waiting();
+}
+void ver_mas_caro_y_barato(void *context) {
+  Stack *stack = (Stack *)context;
+  float mas_caro=0;
+  float menos_caro=0;
+  for(Data * current= stack->top;current!=NULL;current = current->next){
+    if(current->Precio > mas_caro){
+      mas_caro = current->Precio;
+    }
+    if(current->Precio < menos_caro){
+      menos_caro = current->Precio;
+    }
+  }
+  clear();
+  content("El mas barato es %f, y el mas barato es %f!",menos_caro,mas_caro);
+  midLine();
+  waiting();
+}
+void menores_a_70(void *context) {
+  Stack *stack = (Stack *)context;
+  clear();
+  content("Mostrando numeros menores a 70!");
+  midLine();
+  for(Data *current= stack->top;current!=NULL;current = current->next){
+    if(current->Precio < 70){
+      content("%f",current->Precio);
+    }
+  }
+  midLine();
+  waiting();
+}
+
+void opt_liberate_stack(void *context){
+  Stack *stack = (Stack *)context;
+  free_stack(stack);
+  clear();
+  topLine();
+  content("Se libero la lista!");
+  midLine();
+  waiting();
+}
+void opt_mock_numbers(void *context){
+  Stack *stack = (Stack *)context;
+  mock_numbers(stack);
+  clear();
+  topLine();
+  content("Se mockeo la lista!");
+  midLine();
+  waiting();
+}
+void opt_exit(void *context){
+  clear();
+  topLine();
+  content("Saliendo del programa...");
+  midLine();
+  waiting();
+  clear();
+  exit(0);
+}   
